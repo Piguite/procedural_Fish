@@ -3,6 +3,7 @@ import pygame
 from snake import Snake
 from fish import Fish
 import math
+import datetime
 
 def draw_water_overlay(screen, width, height, nenuphar_img):
     # Surface transparente
@@ -34,13 +35,34 @@ def draw_water_overlay(screen, width, height, nenuphar_img):
     nenuphar_rect = nenuphar_img.get_rect(bottomright=(width, height))
     water_surface.blit(nenuphar_img, nenuphar_rect)
     screen.blit(water_surface, (0, 0))
-    
+
+def date(font_large, font_small):
+    now = datetime.datetime.now()
+    day_name = now.strftime("%A").capitalize()
+    date_str = now.strftime("%d/%m/%Y")
+    time_str = now.strftime("%Hh%M")
+
+    # Rendu du texte
+    text_day = font_large.render(day_name, True, (255, 255, 255))
+    text_date = font_small.render(f"{date_str} {time_str}", True, (200, 200, 200))
+
+    # Position du haut-centre
+    padding_top = 20
+    text_day_rect = text_day.get_rect(midtop=(screen_width // 2, padding_top))
+    text_date_rect = text_date.get_rect(midtop=(screen_width // 2, text_day_rect.bottom + 5))
+
+    screen.blit(text_day, text_day_rect)
+    screen.blit(text_date, text_date_rect)
 
 pygame.init()
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+info = pygame.display.Info()
+screen_width, screen_height = info.current_w, info.current_h
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.NOFRAME)
 screen_width, screen_height = screen.get_size()
 clock = pygame.time.Clock()
 nenuphar_img = pygame.image.load("img/test2.png").convert_alpha()
+font_large = pygame.font.SysFont("Arial", 48)
+font_small = pygame.font.SysFont("Arial", 36)
 
 snake = Snake((screen_width / 2, screen_height / 2))
 
@@ -51,8 +73,9 @@ fish_list = [
     Fish((screen_width * 0.75, screen_height / 2), body_color=(255, 100, 180), fin_color=(255, 150, 210)),
 ]
 
-
 running = True
+has_focus = True
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -66,10 +89,11 @@ while running:
     for fish in fish_list:
         fish.update_auto(screen_width, screen_height)
         fish.display(screen)
-        #fish.debug_display(screen)
+        # fish.debug_display(screen)
 
     draw_water_overlay(screen, screen_width, screen_height, nenuphar_img)
 
+    date(font_large, font_small)
     pygame.display.flip()
     clock.tick(60)
 
