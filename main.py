@@ -34,7 +34,7 @@ def draw_water_overlay(screen, width, height, nenuphar_img):
     nenuphar_rect = nenuphar_img.get_rect(bottomright=(width, height))
     water_surface.blit(nenuphar_img, nenuphar_rect)
     screen.blit(water_surface, (0, 0))
-    
+
 
 pygame.init()
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -43,6 +43,7 @@ clock = pygame.time.Clock()
 nenuphar_img = pygame.image.load("img/test2.png").convert_alpha()
 
 snake = Snake((screen_width / 2, screen_height / 2))
+snake2 = Snake((screen_width / 2, screen_height / 2), (120, 120, 0))
 
 fish_list = [
     Fish((screen_width / 4, screen_height / 2), body_color=(58, 124, 165), fin_color=(129, 195, 215)),
@@ -60,9 +61,12 @@ while running:
 
     screen.fill((20, 30, 60))
 
-    # snake.update_auto(screen_width, screen_height)
-    # snake.display(screen)
-    # snake.debug_display(screen)
+    snake.update_auto(screen_width, screen_height)
+    snake.display(screen)
+    snake.debug_display(screen)
+    snake2.update_auto(screen_width, screen_height)
+    snake2.display(screen)
+    snake2.debug_display(screen)
     for fish in fish_list:
         fish.update_auto(screen_width, screen_height)
         fish.display(screen)
