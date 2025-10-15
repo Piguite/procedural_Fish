@@ -5,11 +5,12 @@ from chain import Chain
 from utils import from_angle, set_mag
 
 class Snake:
-    def __init__(self, origin):
+    def __init__(self, origin, color = (172, 57, 49)):
         self.spine = Chain(origin, 48, 64, math.pi / 8)
         self.speed = 4.0
         self.angle = random.uniform(0, 2 * math.pi)
         self.time = 0.0
+        self.color = color
 
     def update_auto(self, screen_width, screen_height):
         self.time += 0.05
@@ -39,7 +40,7 @@ class Snake:
         self.spine.resolve((new_x, new_y))
 
     def display(self, screen):
-        pygame.draw.polygon(screen, (172, 57, 49), self.get_body_points())
+        pygame.draw.polygon(screen, self.color, self.get_body_points())
         pygame.draw.circle(screen, (255, 255, 255),
                            (int(self.get_pos_x(0, math.pi/2, -18)), int(self.get_pos_y(0, math.pi/2, -18))), 12)
         pygame.draw.circle(screen, (255, 255, 255),
